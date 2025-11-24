@@ -2,9 +2,6 @@
 
 A powerful GenAI-powered web application that helps entrepreneurs, students, and professionals generate unique business ideas and evaluate their market potential. Built with Python backend and modern web technologies.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/bhousxrenz/business-analyzer-ai)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
 ## ✨ Features
 
 - 💡 **AI-Powered Business Idea Generation** - Generate creative and unique business concepts based on your preferences
@@ -242,34 +239,3 @@ Contributions are welcome! Here's how you can help:
 - [ ] Multi-language support
 - [ ] Real-time collaboration features
 - [ ] Integration with business planning tools
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 👨‍💻 Author
-
-**bhousxrenz**
-- GitHub: [@bhousxrenz](https://github.com/bhousxrenz)
-
-## 🙏 Acknowledgments
-
-- [Anthropic](https://www.anthropic.com) for Claude API
-- [Vercel](https://vercel.com) for hosting platform
-- [Chart.js](https://www.chartjs.org) for data visualization
-- [Flask](https://flask.palletsprojects.com) for Python web framework
-
-## 📞 Support
-
-If you have any questions or run into issues:
-- Open an [Issue](https://github.com/bhousxrenz/business-analyzer-ai/issues)
-- Check existing issues for solutions
-- Read the [documentation](https://docs.anthropic.com)
-
-## ⭐ Show Your Support
-
-If this project helped you, please give it a ⭐️!
-
----
-
-**Built with ❤️ using AI and modern web technologies**
