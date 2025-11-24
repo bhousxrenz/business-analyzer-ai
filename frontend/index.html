@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Business Analyzer</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <button class="new-chat-btn" onclick="startNewChat()">
+                    <span>➕</span> New Chat
+                </button>
+            </div>
+            
+            <div class="chat-history">
+                <div class="history-label">CHAT HISTORY</div>
+                <div id="chatHistoryList"></div>
+            </div>
+
+            <div class="sidebar-footer">
+                <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
+                    <span>📎</span> Upload File
+                </button>
+                <input type="file" id="fileInput" accept=".txt,.csv,.json" style="display: none;" onchange="handleFileUpload(event)">
+            </div>
+        </div>
+
+        <!-- Main Chat Area -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+                <div class="header-title">
+                    <span class="icon">📊</span>
+                    <h1>AI Business Analyzer</h1>
+                </div>
+            </div>
+
+            <!-- Messages Container -->
+            <div class="messages-container" id="messagesContainer">
+                <div class="message assistant-message">
+                    <div class="message-avatar">💡</div>
+                    <div class="message-content">
+                        <p>Hello! I'm your AI Business Analyzer. I can help you:</p>
+                        <ul>
+                            <li>Generate unique business ideas</li>
+                            <li>Analyze market potential</li>
+                            <li>Evaluate competitors</li>
+                            <li>Create financial projections</li>
+                            <li>Develop marketing strategies</li>
+                            <li>Analyze your business data</li>
+                        </ul>
+                        <p>How can I assist you today?</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="input-container">
+                <div class="input-wrapper">
+                    <input 
+                        type="text" 
+                        id="messageInput" 
+                        placeholder="Ask about business ideas, market analysis, or upload data..."
+                        onkeypress="handleKeyPress(event)"
+                    >
+                    <button class="send-btn" onclick="sendMessage()">
+                        <span>➤</span>
+                    </button>
+                </div>
+                <div class="disclaimer">
+                    AI Business Analyzer can make mistakes. Verify important information.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
