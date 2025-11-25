@@ -229,13 +229,4 @@ Contributions are welcome! Here's how you can help:
 - LocalStorage has a 5-10MB limit depending on browser
 - File uploads limited to text-based formats (CSV, TXT, JSON)
 
-## 📝 Roadmap
 
-- [ ] Add user authentication
-- [ ] Implement database for persistent storage
-- [ ] Add more chart types and visualizations
-- [ ] Support for PDF and Excel file uploads
-- [ ] Export business plans as PDF
-- [ ] Multi-language support
-- [ ] Real-time collaboration features
-- [ ] Integration with business planning tools
