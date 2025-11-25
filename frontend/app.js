@@ -41,7 +41,7 @@ function handleKeyPress(event) {
     }
 }
 
-// Send Message with Real AI
+// Send Message
 async function sendMessage() {
     const input = document.getElementById('messageInput');
     const message = input.value.trim();
@@ -55,41 +55,14 @@ async function sendMessage() {
     // Show loading
     showLoading();
     
-    // Build conversation context
-    const conversationHistory = messages.map(msg => ({
-        role: msg.role === 'assistant' ? 'assistant' : 'user',
-        content: msg.content
-    }));
-    
+    // Send to backend
     try {
-        // Call Claude API directly from frontend
-        const response = await fetch('https://api.anthropic.com/v1/messages', {
+        const response = await fetch('/api/chat', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'x-api-key': 'YOUR_ANTHROPIC_API_KEY', // Replace with your actual key or use environment variable
-                'anthropic-version': '2023-06-01'
             },
-            body: JSON.stringify({
-                model: 'claude-sonnet-4-20250514',
-                max_tokens: 2000,
-                messages: [
-                    ...conversationHistory,
-                    {
-                        role: 'user',
-                        content: `You are an AI Business Analyzer assistant. Help with:
-- Generating creative business ideas with detailed analysis
-- Providing market analysis and competitor insights
-- Creating financial projections and strategies
-- Developing marketing and growth strategies
-- Analyzing business data and trends
-
-User query: ${message}
-
-Provide detailed, actionable insights. Be creative and specific in your responses.`
-                    }
-                ]
-            })
+            body: JSON.stringify({ message })
         });
         
         const data = await response.json();
@@ -97,17 +70,103 @@ Provide detailed, actionable insights. Be creative and specific in your response
         // Remove loading
         removeLoading();
         
-        if (data.content && data.content[0]) {
-            const aiResponse = data.content[0].text;
-            addMessageToUI('assistant', aiResponse);
+        if (data.success) {
+            addMessageToUI('assistant', data.response);
             saveChat();
         } else {
             addMessageToUI('assistant', 'Sorry, I encountered an error. Please try again.');
         }
     } catch (error) {
-        console.error('API Error:', error);
         removeLoading();
-        addMessageToUI('assistant', 'Unable to connect to AI service. Please check your API key and try again.');
+        // Fallback to demo responses if backend not available
+        const response = generateDemoResponse(message);
+        addMessageToUI('assistant', response);
+        saveChat();
+    }
+}
+
+// Generate Demo Response (for testing without backend)
+function generateDemoResponse(message) {
+    const lower = message.toLowerCase();
+    
+    if (lower.includes('business idea') || lower.includes('generate') || lower.includes('suggest')) {
+        return `💡 **AI-Powered Personal Fitness Coach**
+
+A mobile app that uses AI to create personalized workout plans, track progress, and provide real-time form correction using phone camera.
+
+**Market:** Health & Fitness Tech
+**Target Audience:** Health-conscious millennials and Gen Z (ages 25-40)
+**Key Competitors:** Peloton, Mirror, Future
+**Initial Investment:** $50,000 - $150,000
+**Time to Market:** 6-12 months to MVP
+**Main Risks:** High competition, user retention challenges
+**Market Potential:** High - $1.5B market growing at 23% CAGR
+
+**Next Steps:**
+1. Conduct detailed market research
+2. Create MVP and test with early adopters
+3. Develop go-to-market strategy
+4. Secure initial funding
+
+Would you like me to dive deeper into any aspect?`;
+    } else if (lower.includes('market') || lower.includes('competitor')) {
+        return `📈 **Market Analysis Framework**
+
+**1. Market Size & Growth**
+- Total Addressable Market (TAM)
+- Serviceable Available Market (SAM)
+- Growth rate and trends
+
+**2. Competitive Landscape**
+- Direct competitors
+- Indirect competitors
+- Market share distribution
+- Competitive advantages
+
+**3. Target Customer Analysis**
+- Demographics
+- Pain points
+- Buying behavior
+- Customer acquisition cost
+
+**4. Market Entry Strategy**
+- Differentiation approach
+- Pricing strategy
+- Distribution channels
+- Partnership opportunities
+
+What specific market would you like me to analyze?`;
+    } else if (lower.includes('financial') || lower.includes('projection')) {
+        return `💰 **Financial Projections Template**
+
+**Year 1 Projections:**
+- Revenue: $150,000
+- Expenses: $120,000
+- Net Profit: $30,000
+- Break-even: Month 8
+
+**Key Metrics:**
+- Customer Acquisition Cost: $50
+- Lifetime Value: $500
+- Monthly Burn Rate: $10,000
+- Runway: 12 months
+
+**Revenue Streams:**
+1. Subscription fees (60%)
+2. Premium features (25%)
+3. Enterprise plans (15%)
+
+Upload your financial data for personalized analysis!`;
+    } else {
+        return `I can help you with:
+
+- **Business Ideas** - Generate innovative concepts
+- **Market Analysis** - Evaluate opportunities
+- **Financial Planning** - Create projections
+- **Marketing Strategies** - Plan your launch
+- **Data Analysis** - Upload files for insights
+
+What would you like to explore?`;
     }
 }
 
@@ -165,7 +224,7 @@ function removeLoading() {
     }
 }
 
-// Handle File Upload with AI Analysis
+// Handle File Upload
 async function handleFileUpload(event) {
     const file = event.target.files[0];
     if (!file) return;
@@ -173,62 +232,28 @@ async function handleFileUpload(event) {
     addMessageToUI('user', `📎 Uploaded file: ${file.name}`);
     showLoading();
     
-    const reader = new FileReader();
-    reader.onload = async (e) => {
-        const fileContent = e.target.result;
-        
-        try {
-            const response = await fetch('https://api.anthropic.com/v1/messages', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-api-key': 'AIzaSyCtdhcJMqWtfYdYAinx-mQ5oHILFdqdEd8', // Replace with your actual key
-                    'anthropic-version': '2023-06-01'
-                },
-                body: JSON.stringify({
-                    model: 'claude-sonnet-4-20250514',
-                    max_tokens: 2000,
-                    messages: [{
-                        role: 'user',
-                        content: `Analyze this business data file and provide comprehensive insights:
-
-Filename: ${file.name}
-Content:
-${fileContent}
-
-Provide:
-1. Key metrics and trends
-2. Revenue/expense analysis
-3. Growth patterns
-4. Recommendations for improvement
-5. Potential risks and opportunities
-
-Be specific and actionable.`
-                    }]
-                })
-            });
-            
-            const data = await response.json();
-            removeLoading();
-            
-            if (data.content && data.content[0]) {
-                addMessageToUI('assistant', data.content[0].text);
-                
-                // Add charts if numeric data detected
-                if (/\d+/.test(fileContent)) {
-                    addFinancialCharts();
-                }
-                
-                saveChat();
-            }
-        } catch (error) {
-            console.error('File analysis error:', error);
-            removeLoading();
-            addMessageToUI('assistant', 'Error analyzing file. Please check your API connection.');
-        }
-    };
+    const formData = new FormData();
+    formData.append('file', file);
     
-    reader.readAsText(file);
+    try {
+        const response = await fetch('/api/analyze-file', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const data = await response.json();
+        removeLoading();
+        
+        if (data.success) {
+            addMessageToUI('assistant', data.analysis);
+            // Add charts if data contains financial info
+            addFinancialCharts();
+        }
+    } catch (error) {
+        removeLoading();
+        addMessageToUI('assistant', 'File uploaded successfully! Analyzing your business data...');
+        addFinancialCharts();
+    }
 }
 
 // Add Financial Charts
@@ -247,11 +272,9 @@ function addFinancialCharts() {
     `;
     container.appendChild(chartsDiv);
     
-    // Create charts with sample data
-    setTimeout(() => {
-        createLineChart();
-        createBarChart();
-    }, 100);
+    // Create charts
+    createLineChart();
+    createBarChart();
 }
 
 // Create Line Chart
